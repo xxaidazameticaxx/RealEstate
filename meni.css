@@ -1,0 +1,29 @@
+body {
+    margin: 0;
+    background-color: #fdf1d3;
+    padding-top: 50px;
+}
+
+#meni{
+    text-align: center;
+    position: fixed; 
+    top: 0; 
+    width: 100%; 
+    background-color: white;
+} 
+
+#meni li{
+    display: inline;
+}
+
+#meni li :hover {
+    color: #ff9900;
+  }
+
+#meni li a{
+    padding: 50px;
+    color: blue;
+    text-decoration: none;
+    font-weight: bold;
+}
+
