@@ -83,7 +83,7 @@ button::before {
     transition: width 1000ms;
 }
   
-  button:hover::before {
-    width: 250%;
-  }
+button:hover::before {
+  width: 250%;
+}
   
