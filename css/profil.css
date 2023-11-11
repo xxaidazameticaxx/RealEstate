@@ -25,3 +25,19 @@ img{
     width:110px;
     padding-bottom:20px;
 }
+
+@media (min-width: 500px) {
+    img {
+      float: left;
+      margin-right: 20px;
+      margin-top: 30px;
+    }
+
+    form {
+      overflow: hidden;
+    }
+
+    table {
+      margin-top: 50px;
+    }
+  }

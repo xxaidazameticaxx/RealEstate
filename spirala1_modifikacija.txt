@@ -1,0 +1,20 @@
+U css datoteki profil.html sam dodala naredne naredbe
+
+@media (min-width: 500px) {
+    img {
+      float: left;
+      margin-right: 20px;
+      margin-top: 30px;
+    }
+
+    form {
+      overflow: hidden;
+    }
+
+    table {
+      margin-top: 50px;
+    }
+  }
+
+Ovim smo postigli da se određeni stilovi primjenuju kada je širina preglednika veća ili jednak 500 piksela.
+Slika će biti poravnata lijevo, dodali smo i neke margine slici i tabeli radi boljeg svekupnog izgleda stranice.
