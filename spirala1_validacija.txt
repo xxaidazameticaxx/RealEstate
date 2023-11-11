@@ -1,0 +1,39 @@
+https://validator.w3.org/
+
+Detalji.html
+
+- Error 1
+    An img element must have an alt attribute, except under certain conditions.
+
+- Error 2
+    Stray end tag div
+
+Nekretnine.html
+
+- Error 1
+    An img element must have an alt attribute, except under certain conditions.
+
+Profil.html
+
+- Error 1
+    An img element must have an alt attribute, except under certain conditions.
+
+- Error 2
+    Bad value username for attribute type on element input.
+
+Sažetak: Errori su ponavljajući i vezani za img element gdje sam trebala dodati alt atribut u 2 html fajla
+i jedan dodatni error gdje sam umjesto input type="text" stavila slučajno input type="username".
+
+https://www.cssportal.com/css-validator/
+
+detalji.css
+
+- warning (ispravila)
+    Values of 0 shouldn't have units specified. 
+
+profil.css
+
+- warning
+    Using height with padding can sometimes make elements larger than you expect.
+
+Sažetak: Errora nema, prisutna su samo upozorenja koja mogu poboljšati css
