@@ -1,7 +1,8 @@
 body {
     margin: 0;
     background-color: #fdf1d3;
-    padding-top: 50px;
+    margin-top: 50px;
+    overflow: hidden;
 }
 
 #meni{
@@ -29,7 +30,7 @@ body {
 
 iframe{      
     display: block;   /*inline element*/
-    height: 100vh;  
+    height: 90vh;  
     width: 100vw;  
     border: none; 
 }
