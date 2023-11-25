@@ -2,12 +2,12 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
   // pozivanje metode za filtriranje
   const filtriraneNekretnine = instancaModula.filtrirajNekretnine({ tip_nekretnine: tip_nekretnine });
 
-  //kreiranje grid-container
+  // kreiranje grid-container
   gridContainer = document.createElement('div');
   gridContainer.classList.add('grid-container');
   divReferenca.appendChild(gridContainer);
 
-  // dodavnje elemenata u grid-container element
+  // dodavanje elemenata u grid-container
   gridContainer.innerHTML = "";
 
   filtriraneNekretnine.forEach(nekretnina => {
