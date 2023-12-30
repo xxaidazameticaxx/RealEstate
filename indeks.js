@@ -31,7 +31,6 @@ function findKorisnik(username, password, callback) {
         }
         const users = JSON.parse(data);
         const user = users.find(u => u.username === username);
-
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
             console.log(error);
@@ -56,6 +55,34 @@ function findKorisnikByUsername(username, callback) {
         const user = users.find(u => u.username === username);
         callback(null, user);  
     });
+}
+
+function findNekretninaById(nekretnina_id, callback) {
+    fs.readFile(path.join(__dirname, 'data', 'nekretnine.json'), 'utf8', async (error, data) => {
+        if (error) {
+            console.log(error);
+            callback(error, null);
+            return;
+        }
+        const nekretnine = JSON.parse(data);
+        const nekretnina = nekretnine.find(u => u.id === nekretnina_id);
+        callback(null, nekretnina);  
+    });
+}
+
+async function saveUpdatedNekretnina(nekretnina){
+    const data = await fs.promises.readFile(path.join(__dirname, 'data', 'nekretnine.json'), 'utf8');
+    const nekretnine = JSON.parse(data);
+    const noveNekretnine = 
+        nekretnine.map(u => {
+            if (u.id === nekretnina.id)
+                return nekretnina;
+            else
+                return u;
+        });
+
+    await fs.promises.writeFile(path.join(__dirname, 'data', 'nekretnine.json'), JSON.stringify(noveNekretnine));
+
 }
 
 // Dodatne rute
@@ -119,6 +146,34 @@ app.put('/korisnik', async(req, res) => {
 
             await fs.promises.writeFile(path.join(__dirname, 'data', 'korisnici.json'), JSON.stringify(users));
             res.status(200).json({ poruka: 'Podaci su uspješno ažurirani' });
+        
+    } else {
+        res.status(401).json({ greska: 'Neautorizovan pristup' });
+    }
+});
+
+app.post('/upit', async(req, res) => {
+    if (req.session.username) {
+        const { nekretnina_id, tekst_upita } = req.body;
+
+        findKorisnikByUsername(req.session.username, (error, user) => {
+            if (error || !user) {
+                res.status(500).json({ greska: 'User ne postoji' });
+            } else {
+                findNekretninaById(nekretnina_id, async (error, nekretnina) => {
+                    if (error || !nekretnina) {
+                        res.status(400).json({ greska: `Nekretnina sa id-em ${nekretnina_id} ne postoji`});
+                    } else {
+                        if (!nekretnina.upiti) {
+                            nekretnina.upiti = [];
+                        }
+                        nekretnina.upiti.push({ korisnik_id: user.id, tekst: tekst_upita });
+                        await saveUpdatedNekretnina(nekretnina);
+                        res.status(200).json({ poruka: 'Upit je uspješno dodan'})
+                    }
+                }); 
+            }
+        }); 
         
     } else {
         res.status(401).json({ greska: 'Neautorizovan pristup' });
