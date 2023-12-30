@@ -1,16 +1,1 @@
-[
-    {
-    "id": 1,
-    "ime": "Neko",
-    "prezime": "Nekic",
-    "username": "username1",
-    "password": "hashPassworda1"
-    },
-    {
-    "id": 2,
-    "ime": "Neko2",
-    "prezime": "Nekic2",
-    "username": "username2",
-    "password": "hashPassworda2"
-    }
-]
+[{"id":1,"ime":"Aida","prezime":"Zametica","username":"xxaidazameticaxx","password":"$2b$10$8JYY0b/jwkyTYlJEc68F4O00Lu/A0VCEff8cy1PJa/CDHLxGWUfE6"},{"id":2,"ime":"Neko2","prezime":"Nekic2","username":"username2","password":"hashPassworda2"}]
