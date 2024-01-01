@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
-const bodyParser = require('body-parser');
 const session = require('express-session');
 
 const app = express();
@@ -110,6 +109,7 @@ app.post('/logout', (req, res) => {
 });
 
 app.get('/korisnik', (req, res) => {
+    console.log('Session username:', req.session.username);
     if (req.session.username) {
         findKorisnikByUsername(req.session.username, (error, user) => {
             if (error || !user) {

@@ -40,4 +40,19 @@ li {
     padding-right: 10px;
 }
 
+body{
+    margin:0;
+    background-color: #fdf1d3;
+}
+  
+iframe{     
+    display: block;   /*inline element*/
+    height: 10vh;  
+    width: 100vw;  
+    border: none; 
+}
+
+#sadrzaj{
+    margin:7px;
+}
 

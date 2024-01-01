@@ -1,10 +1,3 @@
-body {
-    margin: 0;
-    background-color: #fdf1d3;
-    margin-top: 50px;
-    overflow: hidden;
-}
-
 #meni{
     text-align: center;
     position: fixed; 
@@ -28,9 +21,8 @@ body {
     font-weight: bold;
 }
 
-iframe{      
-    display: block;   /*inline element*/
-    height: 90vh;  
-    width: 100vw;  
-    border: none; 
+body {
+    margin: 0;
+    padding: 0;
 }
+
