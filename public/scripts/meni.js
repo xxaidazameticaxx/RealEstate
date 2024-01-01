@@ -21,7 +21,6 @@ function loggedInUser(){
             li.appendChild(button);
         } else {
             const a = document.createElement('a');
-            a.href = option.toLowerCase() + '.html'; 
             a.textContent = option;
             a.addEventListener('click', navigateToPage);
             li.appendChild(a);

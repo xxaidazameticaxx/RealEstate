@@ -1,7 +1,10 @@
 function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
   // pozivanje metode za filtriranje
   const filtriraneNekretnine = instancaModula.filtrirajNekretnine({ tip_nekretnine: tip_nekretnine });
-  // kreiranje grid-container
+  
+  divReferenca.innerHTML = `<h2>${tip_nekretnine}</h2>`;
+   // kreiranje grid-container
+
   gridContainer = document.createElement('div');
   gridContainer.classList.add('grid-container');
   divReferenca.appendChild(gridContainer);
@@ -42,11 +45,47 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
           return;
       }
       nekretnine.init(data,null);
-      
+
       //pozivanje funkcije
       spojiNekretnine(divStan, nekretnine, "Stan");
       spojiNekretnine(divKuca, nekretnine, "Kuća");
       spojiNekretnine(divPp, nekretnine, "Poslovni prostor");
+    });
+
+    filtrirajButton.addEventListener("click", function() {
+
+      const minPrice = document.getElementById("minPrice").value;
+      const maxPrice = document.getElementById("maxPrice").value;
+      const minArea = document.getElementById("minArea").value;
+      const maxArea = document.getElementById("maxArea").value;
+      
+      PoziviAjax.getNekretnine((error, data) => {
+        if (error) {
+            console.error(error);
+            return;
+        }
+
+        nekretnine.init(data,null);
+        // filtriranje po dodatnim kriterijima
+        const filtriraneNekretnine = nekretnine.filtrirajNekretnine({ 
+          min_cijena:minPrice,
+          max_cijena:maxPrice,
+          min_kvadratura:minArea,
+          max_kvadratura:maxArea
+        });
+
+        nekretnine.init(filtriraneNekretnine,null);
+
+        divStan.innerHTML = "";
+        divKuca.innerHTML = "";
+        divPp.innerHTML = "";
+        
+        //pozivanje funkcije
+        spojiNekretnine(divStan, nekretnine, "Stan");
+        spojiNekretnine(divKuca, nekretnine, "Kuća");
+        spojiNekretnine(divPp, nekretnine, "Poslovni prostor");
+      });
+
     });
 
     

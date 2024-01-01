@@ -7,6 +7,7 @@ const session = require('express-session');
 const app = express();
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public", "html")));
 app.use(
     session({
         secret:'NAJDNJKADBGRGSKSNA',
@@ -193,10 +194,21 @@ app.get('/nekretnine', (req, res) => {
     });
 });
 
-// Definisanje ruta za dinamički prikaz stranica
-app.get('/:page', (req, res) => {
-    const page = req.params.page;
-    res.sendFile(path.join(__dirname, 'public', 'html', `${page}`));
+// Treci zadatak
+
+app.post('/marketing/nekretnine', (req, res) => {
+    res.status(200);           
+
+});
+
+app.post('/marketing/nekretnina/:id', (req, res) => {
+    res.status(200);           
+
+});
+
+app.post('/marketing/osvjezi', (req, res) => {
+    res.status(200);           
+
 });
 
 const PORT = 3000;

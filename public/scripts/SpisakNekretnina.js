@@ -38,9 +38,9 @@ let SpisakNekretnina = function () {
     }
 
     return {
-    init: init,
-    filtrirajNekretnine: filtrirajNekretnine,
-    ucitajDetaljeNekretnine: ucitajDetaljeNekretnine
+        init: init,
+        filtrirajNekretnine: filtrirajNekretnine,
+        ucitajDetaljeNekretnine: ucitajDetaljeNekretnine
     }
     
 };
