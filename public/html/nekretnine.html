@@ -8,6 +8,26 @@
 <body>
   <iframe src="meni.html"></iframe>
   <div id="sadrzaj">
+  <table id="search-table">
+    <tr>
+        <td><label for="minPrice">Minimalna cijena:</label></td>
+        <td><input type="number" id="minPrice" name="minPrice"></td>
+        <td><label for="maxPrice">Maksimalna cijena:</label></td>
+        <td><input type="number" id="maxPrice" name="maxPrice"></td>
+    </tr>
+    <tr>
+        <td><label for="minArea">Minimalna kvadratura:</label></td>
+        <td><input type="number" id="minArea" name="minArea"></td>
+        <td><label for="maxArea">Maksimalna kvadratura:</label></td>
+        <td><input type="number" id="maxArea" name="maxArea"></td>
+    </tr>
+    <tr>
+        <td colspan="4" style="text-align: center;">
+            <button onclick="pretraga()">Filtriraj nekretnine</button>
+        </td>
+    </tr>
+</table>
+
   <div id="stan">
     <h2>Stan</h2>
   </div>

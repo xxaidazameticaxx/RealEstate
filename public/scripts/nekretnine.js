@@ -22,7 +22,7 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
       <h3 class="naziv">${nekretnina.naziv}</h3>
       <p class="kvadratura">${nekretnina.kvadratura} m<sup>2</sup></p>
       <p class="cijena">${nekretnina.cijena} KM</p>
-      <button class="button">Detalji</button>
+      <button id="detaljiButton" class="button">Detalji</button>
     `;
 
     gridContainer.appendChild(divItem);

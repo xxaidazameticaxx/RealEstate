@@ -47,7 +47,7 @@ img {
   text-align: left;
 }
 
-.button {
+#detaljiButton{
     padding: 1em 2em;
     border: none;
     border-radius: 5px;
@@ -64,14 +64,14 @@ img {
     margin-bottom: 20px;
 }
   
-button:hover {
+#detaljiButton:hover {
     color: #ffffff;
     transform: scale(1.1);
     outline: 2px solid #70bdca;
     box-shadow: 4px 5px 17px -4px #268391;
 }
   
-button::before {
+#detaljiButton::before {
     content: "";
     position: absolute;
     left: -50px;
@@ -84,7 +84,7 @@ button::before {
     transition: width 1000ms;
 }
   
-button:hover::before {
+#detaljiButton:hover::before {
   width: 250%;
 }
 
@@ -101,5 +101,41 @@ iframe{
 }
 
 #sadrzaj{
-    margin:7px;
+    margin:10px;
+}
+
+#search-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+#search-table td {
+    padding: 10px;
+    text-align: left;
+}
+
+#search-table label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#search-table input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+#search-table button {
+    width: fit-content;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+#search-table button:hover {
+    background-color: #45a049;
 }
