@@ -1,4 +1,3 @@
-
 const menuList = document.getElementById('menu-list');
 
 if (localStorage.getItem('username')){

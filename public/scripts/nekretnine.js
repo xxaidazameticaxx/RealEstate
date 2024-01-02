@@ -20,12 +20,14 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
       divItem.classList.add('grid-item2');
     else
       divItem.classList.add('grid-item3');
+
+      divItem.id = nekretnina.id
     divItem.innerHTML = `
       <img src="${nekretnina.slika}" alt="picture">
       <h3 class="naziv">${nekretnina.naziv}</h3>
       <p class="kvadratura">${nekretnina.kvadratura} m<sup>2</sup></p>
       <p class="cijena">${nekretnina.cijena} KM</p>
-      <button id="detaljiButton" class="button">Detalji</button>
+      <button id="detaljiButton" class="button" data-grid-item-id="${nekretnina.id}" onclick="changeWidth(${nekretnina.id})">Detalji</button>
     `;
 
     gridContainer.appendChild(divItem);
@@ -66,27 +68,44 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
         }
 
         nekretnine.init(data,null);
+
         // filtriranje po dodatnim kriterijima
-        const filtriraneNekretnine = nekretnine.filtrirajNekretnine({ 
+        const listaFiltriranihNekretnina = nekretnine.filtrirajNekretnine({ 
           min_cijena:minPrice,
           max_cijena:maxPrice,
           min_kvadratura:minArea,
           max_kvadratura:maxArea
         });
 
-        nekretnine.init(filtriraneNekretnine,null);
+        // pri svakom filtriranju se poziva novoFiltriranje
+        PoziviAjax.postLogin(listaFiltriranihNekretnina);
+
+        nekretnine.init(listaFiltriranihNekretnina,null);
 
         divStan.innerHTML = "";
         divKuca.innerHTML = "";
         divPp.innerHTML = "";
         
-        //pozivanje funkcije
+        // pozivanje funkcije
         spojiNekretnine(divStan, nekretnine, "Stan");
         spojiNekretnine(divKuca, nekretnine, "Kuća");
         spojiNekretnine(divPp, nekretnine, "Poslovni prostor");
       });
 
     });
+
+    function changeWidth(nekretnina_id) {
+      const gridItem = document.getElementById(nekretnina_id);
+      if (gridItem) {
+        gridItem.style.width = '500px';
+      }
+      MarketingAjax.klikNekretnina(nekretnina_id)
+    }
+    
+
+    
+
+    
 
     
 

@@ -1,53 +1,29 @@
 const MarketingAjax = (() => {
 
-    function impl_osvjeziPretrage(noviPodaci, fnCallback) {
-        fetch('http://localhost:3000/marketing/osvjezi', {
+    function impl_osvjeziPretrage() {
+       
+    }
+
+    function impl_osvjeziKlikove() {
+        
+    }
+
+    function impl_novoFiltriranje(listaFiltriranihNekretnina) {
+        const nekretnineIds = listaFiltriranihNekretnina.map(nekretnina => nekretnina.id);
+        fetch('http://localhost:3000/marketing/nekretnine', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(noviPodaci),
+            body: JSON.stringify({ nizNekretnina: nekretnineIds }),
         })
-            .then(response => response.json())
-            .then(data => fnCallback(null, data))
-            .catch(error => fnCallback(error, null));
+            .then( () => {
+                MarketingAjax.osvjeziPretrage();
+            });
     }
 
-    function impl_osvjeziKlikove(nekretnina_id, tekst_upita, fnCallback) {
-        const data = { nekretnina_id, tekst_upita };
-
-        fetch('http://localhost:3000/marketing/osvjezi', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-            .then(response => response.json())
-            .then(data => fnCallback(null, data))
-            .catch(error => fnCallback(error, null));
-    }
-
-    function impl_novoFiltriranje(fnCallback) {
-        fetch('http://localhost:3000/marketing/nekretnine')
-            .then(response => response.json())
-            .then(data => fnCallback(null, data))
-            .catch(error => fnCallback(error, null));
-    }
-
-    function impl_klikNekretnina(username, password, fnCallback) {
-        const data = { username, password };
-
-        fetch('http://localhost:3000/marketing/:id', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-            .then(response => response.json())
-            .then(data => fnCallback(null, data))
-            .catch(error => fnCallback(error, null));
+    function impl_klikNekretnina() {
+       
     }
 
     return {
