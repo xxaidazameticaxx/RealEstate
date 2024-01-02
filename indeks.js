@@ -210,18 +210,16 @@ app.get('/nekretnine', (req, res) => {
 // Treci zadatak
 
 app.post('/marketing/nekretnine', async (req, res) => {
-    
-    const { nizNekretnina } = req.body;
-        
+    const { nizNekretnina } = req.body;       
     const osvjezavanjaData = await fs.promises.readFile(path.join(__dirname, 'data', 'osvjezavanja.json'), 'utf8');
     const osvjezavanja = osvjezavanjaData ? JSON.parse(osvjezavanjaData) : [];
 
     nizNekretnina.forEach((id) => {
         const nekretnina = osvjezavanja.find((u) => u.id === id);
         if (nekretnina) {
-            nekretnina.brojPretraga += 1;
+            nekretnina.pretrage += 1;
         } else {
-            osvjezavanja.push({ id: id, brojPretraga: 1, brojKlikova: 0 });
+            osvjezavanja.push({ id: id, klikovi: 0, pretrage: 1 });
         }
     });
 
@@ -231,10 +229,19 @@ app.post('/marketing/nekretnine', async (req, res) => {
   
 });
 
+app.post("/marketing/nekretnina/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    const osvjezavanjaData = await fs.promises.readFile(path.join(__dirname, 'data', 'osvjezavanja.json'), 'utf8');
+  
+    const data = JSON.parse(osvjezavanjaData);
 
-app.post('/marketing/nekretnina/:id', (req, res) => {
-    res.status(200);           
+    data.forEach((u) => {
+        if(u.id === id)
+        u.klikovi += 1;
+    });
 
+    await fs.promises.writeFile(path.join(__dirname, 'data', 'osvjezavanja.json'), JSON.stringify(data));
+    res.status(200).send();
 });
 
 app.post('/marketing/osvjezi', (req, res) => {
