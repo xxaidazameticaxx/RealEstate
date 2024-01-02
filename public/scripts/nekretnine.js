@@ -28,6 +28,8 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
       <h3 class="naziv">${nekretnina.naziv}</h3>
       <p class="kvadratura">${nekretnina.kvadratura} m<sup>2</sup></p>
       <p class="cijena">${nekretnina.cijena} KM</p>
+      <div class="pretrage">Broj pretraga: <span id="pretrage-${nekretnina.id}">0</span></div>
+      <div class="klikovi">Broj klikova: <span id="klikovi-${nekretnina.id}">0</span></div>
       <button id="detaljiButton" class="button" onclick="clickDetalji(${nekretnina.id})">Detalji</button>
     `;
 

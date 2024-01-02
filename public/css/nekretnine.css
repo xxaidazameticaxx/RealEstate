@@ -70,7 +70,7 @@ img {
     outline: 2px solid #70bdca;
     box-shadow: 4px 5px 17px -4px #268391;
 }
-  
+
 #detaljiButton::before {
     content: "";
     position: absolute;
@@ -138,4 +138,12 @@ iframe{
 
 #search-table button:hover {
     background-color: #45a049;
+}
+
+.pretrage,
+.klikovi {
+  margin-left: 10px;
+  margin-top: 5px;
+  margin-bottom:10px;
+  font-weight: bold;
 }
