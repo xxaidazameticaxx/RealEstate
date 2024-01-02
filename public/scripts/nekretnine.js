@@ -28,7 +28,7 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
       <h3 class="naziv">${nekretnina.naziv}</h3>
       <p class="kvadratura">${nekretnina.kvadratura} m<sup>2</sup></p>
       <p class="cijena">${nekretnina.cijena} KM</p>
-      <div class="pretrage">Broj pretraga: <span id="pretrage-${nekretnina.id}">0</span></div>
+      <div class="pretrage">Broj pretraga: <span id="pretrage-${nekretnina.id}">0</div>
       <div class="klikovi">Broj klikova: <span id="klikovi-${nekretnina.id}">0</span></div>
       <button id="detaljiButton" class="button" onclick="clickDetalji(${nekretnina.id})">Detalji</button>
     `;
@@ -84,9 +84,6 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
           max_kvadratura:maxArea
         });
 
-        // pri svakom filtriranju se poziva novoFiltriranje
-        MarketingAjax.novoFiltriranje(listaFiltriranihNekretnina);
-
         nekretnine.init(listaFiltriranihNekretnina,null);
 
         divStan.innerHTML = "";
@@ -97,6 +94,11 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
         spojiNekretnine(divStan, nekretnine, "Stan");
         spojiNekretnine(divKuca, nekretnine, "Kuća");
         spojiNekretnine(divPp, nekretnine, "Poslovni prostor");
+        
+        // pri svakom filtriranju se poziva novoFiltriranje
+        MarketingAjax.novoFiltriranje(listaFiltriranihNekretnina);
+
+        
       });
 
     });
@@ -106,11 +108,11 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
       if (gridItem) {
         gridItem.style.width = '500px';
       }
-      MarketingAjax.klikNekretnina(nekretnina_id)
+      //MarketingAjax.klikNekretnina(nekretnina_id)
     }
     
 
-    
+   
 
     
 

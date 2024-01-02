@@ -70,19 +70,6 @@ function findNekretninaById(nekretnina_id, callback) {
     });
 }
 
-function findNekretninaById2(nekretnina_id, callback) {
-    fs.readFile(path.join(__dirname, 'data', 'osvjezavanja.json'), 'utf8', async (error, data) => {
-        if (error) {
-            console.log(error);
-            callback(error, null);
-            return;
-        }
-        const nekretnine = JSON.parse(data);
-        const nekretnina = nekretnine.find(u => u.id === nekretnina_id);
-        callback(null, nekretnina);  
-    });
-}
-
 async function saveUpdatedNekretnina(nekretnina){
     const data = await fs.promises.readFile(path.join(__dirname, 'data', 'nekretnine.json'), 'utf8');
     const nekretnine = JSON.parse(data);
@@ -219,7 +206,7 @@ app.post('/marketing/nekretnine', async (req, res) => {
         if (nekretnina) {
             nekretnina.pretrage += 1;
         } else {
-            osvjezavanja.push({ id: id, klikovi: 0, pretrage: 1 });
+            osvjezavanja.push({ id: parseInt(id), klikovi: parseInt(0), pretrage: parseInt(1) });
         }
     });
 
@@ -244,11 +231,36 @@ app.post("/marketing/nekretnina/:id", async (req, res) => {
     res.status(200).send();
 });
 
-app.post('/marketing/osvjezi', (req, res) => {
-    res.status(200);           
+app.post("/marketing/osvjezi", async (req, res) => {
+    let nizNekretnina = req.body.nizNekretnina;
+  
+    // Ako je poslan body na rutu
+    if (nizNekretnina) {
+      // Ako sesija ne sadrzi id-ove uzeti id-eve iz body-a i dodijeliti ih sesiji
+      if (!req.session.nizNekretnina) {
+        req.session.nizNekretnina = nizNekretnina;
+      } else {
+        // Ako sesija sadrzi id-eve koristiti njih
+        nizNekretnina = req.session.nizNekretnina;
+      }
+  
+      const osvjezavanjaData = await fs.promises.readFile(path.join(__dirname, "data", "osvjezavanja.json"),"utf8");
+      
+      const osvjezavanja = osvjezavanjaData ? JSON.parse(osvjezavanjaData) : [];
+  
+      //console.log("Ovo je procitano iz osvjezavanja",osvjezavanja);
 
-});
+      //console.log("Ovo je nizNekretnina", nizNekretnina);
 
+      const noviPodaci = osvjezavanja.filter((u) => nizNekretnina.find((p) =>  p === u.id));
+
+      //console.log("novi podaci su",noviPodaci);
+      res.status(200).json({ nizNekretnina: noviPodaci }); //provjeriti??
+    } else {
+      res.status(400).json({ error: "Invalid request body" });
+    }
+  });
+  
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
