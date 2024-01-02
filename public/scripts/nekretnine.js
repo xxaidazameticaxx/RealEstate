@@ -47,6 +47,10 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
           console.error(error);
           return;
       }
+
+      //kad se tek otvori prvi put
+      MarketingAjax.novoFiltriranje(data);
+
       nekretnine.init(data,null);
 
       //pozivanje funkcije
@@ -79,7 +83,7 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
         });
 
         // pri svakom filtriranju se poziva novoFiltriranje
-        PoziviAjax.postLogin(listaFiltriranihNekretnina);
+        MarketingAjax.novoFiltriranje(listaFiltriranihNekretnina);
 
         nekretnine.init(listaFiltriranihNekretnina,null);
 

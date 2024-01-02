@@ -17,13 +17,20 @@ const MarketingAjax = (() => {
             },
             body: JSON.stringify({ nizNekretnina: nekretnineIds }),
         })
-            .then( () => {
-                MarketingAjax.osvjeziPretrage();
-            });
+            //.then( () => {
+             //   MarketingAjax.osvjeziPretrage();
+            //});
     }
 
-    function impl_klikNekretnina() {
-       
+    function impl_klikNekretnina(nekretnina_id) {
+       //osvjezi ovu nekretninu
+       //prekini osvjezavanje za ostale
+       fetch(`http://localhost:3000/marketing/nekretnina/${nekretnina_id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
     }
 
     return {
