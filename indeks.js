@@ -70,6 +70,19 @@ function findNekretninaById(nekretnina_id, callback) {
     });
 }
 
+function findNekretninaById2(nekretnina_id, callback) {
+    fs.readFile(path.join(__dirname, 'data', 'osvjezavanja.json'), 'utf8', async (error, data) => {
+        if (error) {
+            console.log(error);
+            callback(error, null);
+            return;
+        }
+        const nekretnine = JSON.parse(data);
+        const nekretnina = nekretnine.find(u => u.id === nekretnina_id);
+        callback(null, nekretnina);  
+    });
+}
+
 async function saveUpdatedNekretnina(nekretnina){
     const data = await fs.promises.readFile(path.join(__dirname, 'data', 'nekretnine.json'), 'utf8');
     const nekretnine = JSON.parse(data);
@@ -196,10 +209,28 @@ app.get('/nekretnine', (req, res) => {
 
 // Treci zadatak
 
-app.post('/marketing/nekretnine', (req, res) => {
-    res.status(200);           
+app.post('/marketing/nekretnine', async (req, res) => {
+    
+    const { nizNekretnina } = req.body;
+        
+    const osvjezavanjaData = await fs.promises.readFile(path.join(__dirname, 'data', 'osvjezavanja.json'), 'utf8');
+    const osvjezavanja = osvjezavanjaData ? JSON.parse(osvjezavanjaData) : [];
 
+    nizNekretnina.forEach((id) => {
+        const nekretnina = osvjezavanja.find((u) => u.id === id);
+        if (nekretnina) {
+            nekretnina.brojPretraga += 1;
+        } else {
+            osvjezavanja.push({ id: id, brojPretraga: 1, brojKlikova: 0 });
+        }
+    });
+
+    await fs.promises.writeFile(path.join(__dirname, 'data', 'osvjezavanja.json'), JSON.stringify(osvjezavanja));
+
+    res.status(200).send();
+  
 });
+
 
 app.post('/marketing/nekretnina/:id', (req, res) => {
     res.status(200);           
