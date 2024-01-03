@@ -1,6 +1,7 @@
 const MarketingAjax = (() => {
 
     let filtiranje = false;
+    let sessionNekretnina; //provjera
 
     function impl_novoFiltriranje(listaFiltriranihNekretnina) {
         const nekretnineIds = listaFiltriranihNekretnina.map(nekretnina => nekretnina.id);
@@ -100,13 +101,17 @@ const MarketingAjax = (() => {
           const nekretnineDivs = divReferenca.querySelectorAll('.grid-item1, .grid-item2, .grid-item3');
 
           const idNekretninaArray = Array.from(nekretnineDivs).map((nekretninaDiv) => parseInt(nekretninaDiv.id));
-  
-          const sessionNekretnina = JSON.parse(sessionStorage.getItem('nizNekretnina'));
 
-          // poziva se pri svakom filtriranju
-          if (JSON.stringify(idNekretninaArray) !== JSON.stringify(sessionNekretnina)) {
+          let sessionNekretninaIds = sessionNekretnina ? sessionNekretnina.nizNekretnina.map(nekretnina => nekretnina.id) : []
+
+           const sortedIdNekretninaArrays = idNekretninaArray.slice().sort();
+           const sortedSessionNekretninaIds = sessionNekretninaIds.slice().sort();
+
+          // poziva se pri svakom filtriranju, i prvobitnom kad je sesija prazna
+          if (sessionNekretninaIds.length === 0 || JSON.stringify(sortedIdNekretninaArrays) !== JSON.stringify(sortedSessionNekretninaIds) ){
 
             if (filtiranje) {
+                console.log("FILTIRANJE SE DESILO");
                 requestBody = JSON.stringify({ nizNekretnina: idNekretninaArray });
                 filtiranje = false;
             }
@@ -123,11 +128,12 @@ const MarketingAjax = (() => {
             })
             .then(response => response.json())
             .then(data => {
+                sessionNekretnina = data;
                 updateKlikoviWithNewData(nekretnineDivs,data)
             })
             .catch(error => {    
                      
-                if(!sessionNekretnina){
+                if(sessionNekretninaIds.length === 0){
                     // sesija nikad nije bila izmijenjena i poziv nije uspjesan pa se polja sakrivaju  
                     hideKlikoviAndPretrageFields(nekretnineDivs);     
                 }                       
@@ -139,7 +145,7 @@ const MarketingAjax = (() => {
               });
           } 
         else {
-              fetch('http://localhost:3000/marketing/osvjeziKlikove', {
+              fetch('http://localhost:3000/marketing/osvjezi', {
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json',
@@ -148,11 +154,13 @@ const MarketingAjax = (() => {
               })
                   .then(response => response.json())
                   .then(data => {
-                    updateKlikoviNewData(nekretnineDivs,data)
+                    console.log("OSVJEZAVANJE SE DESILO")
+                    updateKlikoviwithNewData(nekretnineDivs,data)
                   })
                   .catch(error => {
+                    console.log("OSVJEZAVANJE SE DESILO NENORMALNO")
                     // ažuriraj se podacima posljednje sesije
-                    updateKlikovi(nekretnineDivs,sessionNekretnina)
+                    updateKlikoviWithNewData(nekretnineDivs,sessionNekretnina)
                 });
         }
     }, 500);
@@ -164,12 +172,18 @@ const MarketingAjax = (() => {
 
         const idNekretninaArray = Array.from(nekretnineDivs).map((nekretninaDiv) => parseInt(nekretninaDiv.id));
 
-        const sessionNekretnina = JSON.parse(sessionStorage.getItem('nizNekretnina'));
+        let sessionNekretninaIds = sessionNekretnina ? sessionNekretnina.nizNekretnina.map(nekretnina => nekretnina.id) : []
 
-        // poziva se pri svakom filtriranju
-        if (JSON.stringify(idNekretninaArray) !== JSON.stringify(sessionNekretnina)) {
-            
+        const sortedIdNekretninaArrays = idNekretninaArray.slice().sort();
+        const sortedSessionNekretninaIds = sessionNekretninaIds.slice().sort();
+
+        // poziva se pri svakom filtriranju, i prvobitnom kad je sesija prazna
+        if (sessionNekretninaIds.length === 0 || JSON.stringify(sortedIdNekretninaArrays) !== JSON.stringify(sortedSessionNekretninaIds) ){
+
+            console.log("idNekretninaArrays:",idNekretninaArray);
+            console.log("sessionNekretninaIds:",sessionNekretninaIds);
             if (filtiranje) {
+                console.log("FILTIRANJE SE DESILO VOL2");
                 requestBody = JSON.stringify({ nizNekretnina: idNekretninaArray });
             }
             else{
@@ -188,7 +202,7 @@ const MarketingAjax = (() => {
                 updatePretrageWithNewData(nekretnineDivs,data)
             })
             .catch(error => {    
-                  if(!sessionNekretnina){
+                  if(sessionNekretninaIds.length === 0){
                       // sesija nikad nije bila izmijenjena i poziv nije uspjesan pa se polja sakrivaju  
                       hideKlikoviAndPretrageFields(nekretnineDivs);     
                   }                       
@@ -199,7 +213,7 @@ const MarketingAjax = (() => {
                       
             });
         } else {
-            fetch('http://localhost:3000/marketing/osvjeziKlikove', {
+            fetch('http://localhost:3000/marketing/osvjezi', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -208,9 +222,11 @@ const MarketingAjax = (() => {
             })
                 .then(response => response.json())
                 .then(data => {
+                    console.log("OSVJEZAVANJE SE DESILO NORMALNO VOL2")
                     updatePretrageWithNewData(nekretnineDivs,data)
                 })
                 .catch(error => {
+                    console.log("OSVJEZAVANJE SE DESILO NENORMALNO VOL2")
                     // ažuriraj se podacima posljednje sesije
                     updatePretrageWithNewData(nekretnineDivs,sessionNekretnina)
                 });

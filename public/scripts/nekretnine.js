@@ -105,9 +105,16 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
 
     function clickDetalji(nekretnina_id) {
       const gridItem = document.getElementById(nekretnina_id);
+    
       if (gridItem) {
         gridItem.style.width = '500px';
+        gridItem.style.gridColumn = 'span 2';
       }
-      MarketingAjax.klikNekretnina(nekretnina_id)
+    
+      MarketingAjax.klikNekretnina(nekretnina_id);
     }
+    
+    
+    
+    
     

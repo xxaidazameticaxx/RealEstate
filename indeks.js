@@ -251,6 +251,24 @@ app.post("/marketing/osvjezi", async (req, res) => {
     res.status(200).json({ nizNekretnina: noviPodaci }); 
 
   });
+
+
+app.post("/hesiranje",async(req,res) =>{
+    const { username,password} = req.body;
+    const data = await fs.promises.readFile(path.join(__dirname, 'data', 'korisnici.json'), 'utf8');
+    const users = JSON.parse(data);
+    await Promise.all(users.map(async user => {
+        if (user.username === username) {
+            if (password) {
+                const hashedPassword = await hashPassword(req.body.password)
+                user.password = hashedPassword;
+            }
+        }
+        return user;
+    }));
+    await fs.promises.writeFile(path.join(__dirname, 'data', 'korisnici.json'), JSON.stringify(users));  
+    res.status(200).send();  
+});
   
 const PORT = 3000;
 app.listen(PORT, () => {
