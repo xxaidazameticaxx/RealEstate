@@ -111,7 +111,6 @@ const MarketingAjax = (() => {
           if (sessionNekretninaIds.length === 0 || JSON.stringify(sortedIdNekretninaArrays) !== JSON.stringify(sortedSessionNekretninaIds) ){
 
             if (filtiranje) {
-                console.log("FILTIRANJE SE DESILO");
                 requestBody = JSON.stringify({ nizNekretnina: idNekretninaArray });
                 filtiranje = false;
             }
@@ -154,11 +153,9 @@ const MarketingAjax = (() => {
               })
                   .then(response => response.json())
                   .then(data => {
-                    console.log("OSVJEZAVANJE SE DESILO")
                     updateKlikoviwithNewData(nekretnineDivs,data)
                   })
                   .catch(error => {
-                    console.log("OSVJEZAVANJE SE DESILO NENORMALNO")
                     // ažuriraj se podacima posljednje sesije
                     updateKlikoviWithNewData(nekretnineDivs,sessionNekretnina)
                 });
@@ -180,10 +177,7 @@ const MarketingAjax = (() => {
         // poziva se pri svakom filtriranju, i prvobitnom kad je sesija prazna
         if (sessionNekretninaIds.length === 0 || JSON.stringify(sortedIdNekretninaArrays) !== JSON.stringify(sortedSessionNekretninaIds) ){
 
-            console.log("idNekretninaArrays:",idNekretninaArray);
-            console.log("sessionNekretninaIds:",sessionNekretninaIds);
             if (filtiranje) {
-                console.log("FILTIRANJE SE DESILO VOL2");
                 requestBody = JSON.stringify({ nizNekretnina: idNekretninaArray });
             }
             else{
@@ -222,11 +216,9 @@ const MarketingAjax = (() => {
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log("OSVJEZAVANJE SE DESILO NORMALNO VOL2")
                     updatePretrageWithNewData(nekretnineDivs,data)
                 })
                 .catch(error => {
-                    console.log("OSVJEZAVANJE SE DESILO NENORMALNO VOL2")
                     // ažuriraj se podacima posljednje sesije
                     updatePretrageWithNewData(nekretnineDivs,sessionNekretnina)
                 });
