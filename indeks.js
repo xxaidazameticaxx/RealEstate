@@ -110,7 +110,6 @@ app.post('/logout', (req, res) => {
 });
 
 app.get('/korisnik', (req, res) => {
-    console.log('Session username:', req.session.username);
     if (req.session.username) {
         findKorisnikByUsername(req.session.username, (error, user) => {
             if (error || !user) {
@@ -224,7 +223,7 @@ app.post("/marketing/nekretnina/:id", async (req, res) => {
 
     data.forEach((u) => {
         if(u.id === id)
-        u.klikovi += 1;
+            u.klikovi += 1;
     });
 
     await fs.promises.writeFile(path.join(__dirname, 'data', 'osvjezavanja.json'), JSON.stringify(data));
@@ -232,33 +231,25 @@ app.post("/marketing/nekretnina/:id", async (req, res) => {
 });
 
 app.post("/marketing/osvjezi", async (req, res) => {
-    let nizNekretnina = req.body.nizNekretnina;
-  
-    // Ako je poslan body na rutu
-    if (nizNekretnina) {
-      // Ako sesija ne sadrzi id-ove uzeti id-eve iz body-a i dodijeliti ih sesiji
-      if (!req.session.nizNekretnina) {
-        req.session.nizNekretnina = nizNekretnina;
-      } else {
-        // Ako sesija sadrzi id-eve koristiti njih
-        nizNekretnina = req.session.nizNekretnina;
-      }
-  
-      const osvjezavanjaData = await fs.promises.readFile(path.join(__dirname, "data", "osvjezavanja.json"),"utf8");
-      
-      const osvjezavanja = osvjezavanjaData ? JSON.parse(osvjezavanjaData) : [];
-  
-      //console.log("Ovo je procitano iz osvjezavanja",osvjezavanja);
 
-      //console.log("Ovo je nizNekretnina", nizNekretnina);
-
-      const noviPodaci = osvjezavanja.filter((u) => nizNekretnina.find((p) =>  p === u.id));
-
-      //console.log("novi podaci su",noviPodaci);
-      res.status(200).json({ nizNekretnina: noviPodaci }); //provjeriti??
-    } else {
-      res.status(400).json({ error: "Invalid request body" });
+    if (req.body.nizNekretnina) {
+        req.session.nizNekretnina = req.body.nizNekretnina;
     }
+        
+    const nizNekretnina = req.session.nizNekretnina;
+  
+    console.log("Sad je poslan samo 1",nizNekretnina)
+      
+    const osvjezavanjaData = await fs.promises.readFile(path.join(__dirname, "data", "osvjezavanja.json"),"utf8");
+      
+    const osvjezavanja = osvjezavanjaData ? JSON.parse(osvjezavanjaData) : [];
+
+    const noviPodaci = osvjezavanja.filter((u) =>nizNekretnina.find((i) => i === parseInt(u.id)));
+
+    console.log("novi podaci su",noviPodaci);
+
+    res.status(200).json({ nizNekretnina: noviPodaci }); 
+
   });
   
 const PORT = 3000;
