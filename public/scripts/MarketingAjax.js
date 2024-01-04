@@ -22,6 +22,7 @@ const MarketingAjax = (() => {
     }
 
     function impl_klikNekretnina(nekretnina_id) {
+        console.log("USLO U KLIK NEKRETNINA");
        fetch(`http://localhost:3000/marketing/nekretnina/${nekretnina_id}`, {
             method: 'POST',
             headers: {
@@ -36,7 +37,12 @@ const MarketingAjax = (() => {
                 },
                 body: JSON.stringify( {nizNekretnina: [parseInt(nekretnina_id)] }),
             })
-        });     
+            .then(response => response.json())
+            .then(data => {
+                sessionNekretnina = data;
+            })
+        });  
+        
     }
 
     function updatePretrageWithNewData(nekretnineDivs,data){
@@ -45,6 +51,8 @@ const MarketingAjax = (() => {
                 
                         // Pronadji pretrage za pojedinacnu nekretninu
                         const nekretninaData = data.nizNekretnina.find(item => item.id === nekretninaId);
+
+                        console.log("OVO JE VELICINA NIZA NEKRETNINA",data.nizNekretnina.length);
 
                         if (nekretninaData) {
 
@@ -65,7 +73,7 @@ const MarketingAjax = (() => {
     
             // Pronadji klikove za pojedinacnu nekretninu
             const nekretninaData = data.nizNekretnina.find(item => item.id === nekretninaId);
-
+            console.log("OVO JE VELICINA NIZA NEKRETNINA",data.nizNekretnina.length);
             if (nekretninaData) {
 
                 const klikovi= document.getElementById(`klikovi-${nekretninaId}`);
@@ -113,8 +121,11 @@ const MarketingAjax = (() => {
             if (filtiranje) {
                 requestBody = JSON.stringify({ nizNekretnina: idNekretninaArray });
                 filtiranje = false;
+
+                console.log("FILTRIRA VOL 1");
             }
             else{
+                console.log("PRAZAN BODY JER JEDNU OSVJEZAVA VOL 1")
                 requestBody = JSON.stringify({});
             }
 
@@ -144,6 +155,7 @@ const MarketingAjax = (() => {
               });
           } 
         else {
+            console.log("OSVJEZAVA VOL 1")
               fetch('http://localhost:3000/marketing/osvjezi', {
                   method: 'POST',
                   headers: {
@@ -178,9 +190,11 @@ const MarketingAjax = (() => {
         if (sessionNekretninaIds.length === 0 || JSON.stringify(sortedIdNekretninaArrays) !== JSON.stringify(sortedSessionNekretninaIds) ){
 
             if (filtiranje) {
+                console.log("FILTRIRA VOL 2");
                 requestBody = JSON.stringify({ nizNekretnina: idNekretninaArray });
             }
             else{
+                console.log("PRAZAN BODY JER JEDNU OSVJEZAVA VOL 1")
                 requestBody = JSON.stringify({});
             }
 
@@ -207,6 +221,7 @@ const MarketingAjax = (() => {
                       
             });
         } else {
+            console.log("OSVJEZAVA VOL 2")
             fetch('http://localhost:3000/marketing/osvjezi', {
                 method: 'POST',
                 headers: {
