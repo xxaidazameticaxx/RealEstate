@@ -41,17 +41,17 @@ async function findKorisnik(username, password) {
     }
 }
 
-function findKorisnikByUsername(username, callback) {
-    fs.readFile(path.join(__dirname, 'data', 'korisnici.json'), 'utf8', async (error, data) => {
-        if (error) {
-            console.log(error);
-            callback(error, null);
-            return;
+async function findKorisnikByUsername(username) {
+    try {
+        const user = await db.korisnik.findOne({where: { username: username },});
+        if (!user) {
+            return null;
         }
-        const users = JSON.parse(data);
-        const user = users.find(u => u.username === username);
-        callback(null, user);  
-    });
+        return user;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 }
 
 function findNekretninaById(nekretnina_id, callback) {
@@ -96,7 +96,7 @@ app.post('/login', async (req, res) => {
         }
     } catch (error) {
         console.error(error);
-        res.status(401).json({ greska: 'Neuspješna prijava' });
+        res.status(500).json({ greska: 'Problem sa nabavljanjem podataka iz baze' });
     }
 });
 
@@ -110,15 +110,19 @@ app.post('/logout', (req, res) => {
 
 });
 
-app.get('/korisnik', (req, res) => {
+app.get('/korisnik', async (req, res) => {
     if (req.session.username) {
-        findKorisnikByUsername(req.session.username, (error, user) => {
-            if (error || !user) {
+        try {
+            const user = await findKorisnikByUsername(req.session.username);
+            if (!user) {
                 res.status(401).json({ greska: 'Neautorizovan pristup' });
             } else {
                 res.status(200).json({ id:user.id, ime:user.ime, prezime:user.prezime,username:user.username,password:user.password });
             }
-        });     
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ greska: 'Problem sa nabavljanjem podataka iz baze' });
+        }    
    } else {
        res.status(401).json({ greska: 'Neautorizovan pristup' });
    }
