@@ -47,7 +47,8 @@ img {
   text-align: left;
 }
 
-#detaljiButton{
+#detaljiButton,
+[id^="detaljiButton-"] {
     padding: 1em 2em;
     border: none;
     border-radius: 5px;
@@ -59,19 +60,19 @@ img {
     font-size: 15px;
     overflow: hidden;
     outline: 2px solid #2c9caf;
-    margin: 0 auto; 
-    display: block; 
+    margin: 0 auto;
+    display: block;
     margin-bottom: 20px;
 }
-  
-#detaljiButton:hover {
+
+[id^="detaljiButton-"]:hover {
     color: #ffffff;
     transform: scale(1.1);
     outline: 2px solid #70bdca;
     box-shadow: 4px 5px 17px -4px #268391;
 }
 
-#detaljiButton::before {
+[id^="detaljiButton-"]::before {
     content: "";
     position: absolute;
     left: -50px;
@@ -83,9 +84,9 @@ img {
     z-index: -1;
     transition: width 1000ms;
 }
-  
-#detaljiButton:hover::before {
-  width: 250%;
+
+[id^="detaljiButton-"]:hover::before {
+    width: 250%;
 }
 
 body{
@@ -152,5 +153,47 @@ iframe{
 .godinaIzgradnje {
     margin-left: 10px;
     margin-bottom:10px;
-  }
+}
+
+#detaljiButton,
+[id^="prikaziDetaljeButton-"] {
+    padding: 1em 2em;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: #2c9caf;
+    transition: all 1000ms;
+    font-size: 15px;
+    overflow: hidden;
+    outline: 2px solid #2c9caf;
+    margin: 0 auto;
+    display: block;
+    margin-bottom: 20px;
+}
+
+[id^="prikaziDetaljeButton-"]:hover {
+    color: #ffffff;
+    transform: scale(1.1);
+    outline: 2px solid #70bdca;
+    box-shadow: 4px 5px 17px -4px #268391;
+}
+
+[id^="prikaziDetaljeButton-"]::before {
+    content: "";
+    position: absolute;
+    left: -50px;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background-color: #2c9caf;
+    transform: skewX(45deg);
+    z-index: -1;
+    transition: width 1000ms;
+}
+
+[id^="prikaziDetaljeButton-"]:hover::before {
+    width: 250%;
+}
   
