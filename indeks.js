@@ -16,7 +16,8 @@ app.use(
         })
 );
 
-const db = require('./db.js')
+const db = require('./db.js');
+const { Op } = require('sequelize');
 
 // Hesiranje
 async function hashPassword(plainTextPassword) {
@@ -41,12 +42,11 @@ async function findKorisnik(username, password) {
     }
 }
 
-// Dodatne rute
+// Rute
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
     try {
         const user = await findKorisnik(username, password);
-
         if (!user) {
             res.status(401).json({ greska: 'Neuspješna prijava' });
         } else {
@@ -159,36 +159,44 @@ app.get('/nekretnine', async (req, res) => {
 
 // Treci zadatak
 app.post('/marketing/nekretnine', async (req, res) => {
-    const { nizNekretnina } = req.body;       
-    const osvjezavanjaData = await fs.promises.readFile(path.join(__dirname, 'data', 'osvjezavanja.json'), 'utf8');
-    const osvjezavanja = osvjezavanjaData ? JSON.parse(osvjezavanjaData) : [];
+    const { nizNekretnina } = req.body;
+    try {
+        const nekretnine = await db.nekretnina.findAll({
+            where: {
+                id: {
+                    [Op.in]: nizNekretnina
+                }
+            }
+        });
 
-    nizNekretnina.forEach((id) => {
-        const nekretnina = osvjezavanja.find((u) => u.id === id);
-        if (nekretnina) {
-            nekretnina.pretrage += 1;
-        } else {
-            osvjezavanja.push({ id: parseInt(id), klikovi: parseInt(0), pretrage: parseInt(1) });
+        if (nekretnine.length === 0) {
+            res.status(400).json({ greska: 'Nijedna nekretnina sa navedenim id-jevima nije pronađena' });
+            return;
         }
-    });
-
-    await fs.promises.writeFile(path.join(__dirname, 'data', 'osvjezavanja.json'), JSON.stringify(osvjezavanja));
-    res.status(200).send();
+        await Promise.all(nekretnine.map(async nekretnina => {
+            nekretnina.pretrage = nekretnina.pretrage + 1; 
+            await nekretnina.save();
+        }));
+        res.status(200).send();
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ greska: 'Problem sa nabavljanjem nekretnina iz baze' });
+    }
 });
+
 
 app.post("/marketing/nekretnina/:id", async (req, res) => {
     const id = parseInt(req.params.id);
-    const osvjezavanjaData = await fs.promises.readFile(path.join(__dirname, 'data', 'osvjezavanja.json'), 'utf8');
-  
-    const data = JSON.parse(osvjezavanjaData);
-
-    data.forEach((u) => {
-        if(u.id === id)
-            u.klikovi += 1;
-    });
-
-    await fs.promises.writeFile(path.join(__dirname, 'data', 'osvjezavanja.json'), JSON.stringify(data));
-    res.status(200).send();
+    try{
+        const nekretnina = await db.nekretnina.findByPk(id);
+        nekretnina.klikovi= nekretnina.klikovi + 1;
+        await nekretnina.save()
+        res.status(200).send();
+    }
+    catch(error){
+        console.error(error);
+        res.status(500).json({ greska: 'Problem sa dobavljanjem podataka nekretnine iz baze' });
+    } 
 });
 
 app.post("/marketing/osvjezi", async (req, res) => {
@@ -196,37 +204,27 @@ app.post("/marketing/osvjezi", async (req, res) => {
     if (req.body.nizNekretnina) {
         req.session.nizNekretnina = req.body.nizNekretnina;
     }
-        
+
     const nizNekretnina = req.session.nizNekretnina;
-  
-    console.log("Sad je poslan samo 1",nizNekretnina)
-      
-    const osvjezavanjaData = await fs.promises.readFile(path.join(__dirname, "data", "osvjezavanja.json"),"utf8"); 
-    const osvjezavanja = osvjezavanjaData ? JSON.parse(osvjezavanjaData) : [];
-    const noviPodaci = osvjezavanja.filter((u) =>nizNekretnina.find((i) => i === parseInt(u.id)));
+    console.log("Sad je poslan samo 1", nizNekretnina);
 
-    console.log("novi podaci su",noviPodaci);
-
-    res.status(200).json({ nizNekretnina: noviPodaci }); 
-});
-
-app.post("/hesiranje",async(req,res) =>{
-    const { username,password} = req.body;
-    const data = await fs.promises.readFile(path.join(__dirname, 'data', 'korisnici.json'), 'utf8');
-    const users = JSON.parse(data);
-    await Promise.all(users.map(async user => {
-        if (user.username === username) {
-            if (password) {
-                const hashedPassword = await hashPassword(req.body.password)
-                user.password = hashedPassword;
+    try {
+        const nekretnine = await db.nekretnina.findAll({
+            where: {
+                id: {
+                    [Op.in]: nizNekretnina
+                }
             }
-        }
-        return user;
-    }));
-    await fs.promises.writeFile(path.join(__dirname, 'data', 'korisnici.json'), JSON.stringify(users));  
-    res.status(200).send();  
+        });
+        const noviPodaci = nekretnine.map(({ id, klikovi, pretrage }) => ({ id, klikovi, pretrage }));
+        console.log("novi podaci su", noviPodaci);
+        res.status(200).json({ nizNekretnina: noviPodaci });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ greska: 'Problem sa dobavljanjem podataka nekretnine iz baze' });
+    }
 });
-  
+
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
