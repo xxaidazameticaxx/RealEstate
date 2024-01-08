@@ -67,21 +67,6 @@ async function findNekretninaById(nekretnina_id) {
     }
 }
 
-async function saveUpdatedNekretnina(nekretnina){
-    const data = await fs.promises.readFile(path.join(__dirname, 'data', 'nekretnine.json'), 'utf8');
-    const nekretnine = JSON.parse(data);
-    const noveNekretnine = 
-        nekretnine.map(u => {
-            if (u.id === nekretnina.id)
-                return nekretnina;
-            else
-                return u;
-        });
-
-    await fs.promises.writeFile(path.join(__dirname, 'data', 'nekretnine.json'), JSON.stringify(noveNekretnine));
-
-}
-
 // Dodatne rute
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
@@ -205,17 +190,14 @@ app.get('/korisnik', async (req, res) => {
 
 });
 
-app.get('/nekretnine', (req, res) => {
-    fs.readFile(path.join(__dirname, 'data', 'nekretnine.json'), 'utf8', async (error, data) => {
-        if (error) {
-            console.error(err);
-            res.status(500).json({ error: 'Ne čita dobro iz datoteke' });
-            return;
-        }
-            const nekretnine = JSON.parse(data);
-            res.status(200).json(nekretnine);
-        
-    });
+app.get('/nekretnine', async (req, res) => {
+    try {
+        const nekretnine = await db.nekretnina.findAll();
+        res.status(200).json(nekretnine);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Ne čita dobro iz datoteke' }); // iz baze
+    }
 });
 
 // Treci zadatak
