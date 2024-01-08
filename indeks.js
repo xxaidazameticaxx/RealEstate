@@ -54,17 +54,17 @@ async function findKorisnikByUsername(username) {
     }
 }
 
-function findNekretninaById(nekretnina_id, callback) {
-    fs.readFile(path.join(__dirname, 'data', 'nekretnine.json'), 'utf8', async (error, data) => {
-        if (error) {
-            console.log(error);
-            callback(error, null);
-            return;
+async function findNekretninaById(nekretnina_id) {
+    try {
+        const nekretnina = await db.nekretnina.findByPk(nekretnina_id);
+        if (!nekretnina) {
+            return null;
         }
-        const nekretnine = JSON.parse(data);
-        const nekretnina = nekretnine.find(u => u.id === nekretnina_id);
-        callback(null, nekretnina);  
-    });
+        return nekretnina;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 }
 
 async function saveUpdatedNekretnina(nekretnina){
@@ -160,29 +160,49 @@ app.put('/korisnik', async(req, res) => {
 app.post('/upit', async(req, res) => {
     if (req.session.username) {
         const { nekretnina_id, tekst_upita } = req.body;
-
-        findKorisnikByUsername(req.session.username, (error, user) => {
-            if (error || !user) {
-                res.status(500).json({ greska: 'User ne postoji' });
-            } else {
-                findNekretninaById(nekretnina_id, async (error, nekretnina) => {
-                    if (error || !nekretnina) {
+        try {
+            const user = await findKorisnikByUsername(req.session.username);
+                try{
+                    const nekretnina = await findNekretninaById(nekretnina_id);
+                    if (!nekretnina) {
                         res.status(400).json({ greska: `Nekretnina sa id-em ${nekretnina_id} ne postoji`});
                     } else {
-                        if (!nekretnina.upiti) {
-                            nekretnina.upiti = [];
-                        }
-                        nekretnina.upiti.push({ korisnik_id: user.id, tekst: tekst_upita });
-                        await saveUpdatedNekretnina(nekretnina);
+                        await db.upit.create({nekretnina_id: nekretnina.id,korisnik_id: user.id,tekst_upita: tekst_upita});
                         res.status(200).json({ poruka: 'Upit je uspješno dodan'})
                     }
-                }); 
-            }
-        }); 
+                }
+                catch (error) {
+                    console.error(error);
+                    res.status(500).json({ greska: 'Problem sa nabavljanjem nekretnine iz baze' });
+                }               
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ greska: 'Problem sa nabavljanjem korisnika iz baze' });
+        }
         
     } else {
         res.status(401).json({ greska: 'Neautorizovan pristup' });
     }
+});    
+
+
+app.get('/korisnik', async (req, res) => {
+    if (req.session.username) {
+        try {
+            const user = await findKorisnikByUsername(req.session.username);
+            if (!user) {
+                res.status(401).json({ greska: 'Neautorizovan pristup' });
+            } else {
+                res.status(200).json({ id:user.id, ime:user.ime, prezime:user.prezime,username:user.username,password:user.password });
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ greska: 'Problem sa nabavljanjem podataka iz baze' });
+        }    
+   } else {
+       res.status(401).json({ greska: 'Neautorizovan pristup' });
+   }
+
 });
 
 app.get('/nekretnine', (req, res) => {
