@@ -16,32 +16,29 @@ app.use(
         })
 );
 
+const db = require('./db.js')
+
 // Hesiranje
 async function hashPassword(plainTextPassword) {
     return await bcrypt.hash(plainTextPassword, 10);
 }
 
 // Pomocne funkcije za rute
-function findKorisnik(username, password, callback) {
-    fs.readFile(path.join(__dirname, 'data', 'korisnici.json'), 'utf8', async (error, data) => {
-        if (error) {
-            console.log(error);
-            callback(error, null);
-            return;
+async function findKorisnik(username, password) {
+    try {
+        const user = await db.korisnik.findOne({where: { username: username },});
+        if (!user) {
+            return null;
         }
-        const users = JSON.parse(data);
-        const user = users.find(u => u.username === username);
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
-            console.log(error);
-            callback(error, null);
-            return;
+            return null;
         }
-        else{
-            callback(null, user);
-        }
-        
-    });
+        return user;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 }
 
 function findKorisnikByUsername(username, callback) {
@@ -86,17 +83,21 @@ async function saveUpdatedNekretnina(nekretnina){
 }
 
 // Dodatne rute
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
     const { username, password } = req.body;
+    try {
+        const user = await findKorisnik(username, password);
 
-    findKorisnik(username, password, (error, user) => {
-        if (error || !user) {
+        if (!user) {
             res.status(401).json({ greska: 'Neuspješna prijava' });
         } else {
             req.session.username = username;
             res.status(200).json({ poruka: 'Uspješna prijava' });
         }
-    });
+    } catch (error) {
+        console.error(error);
+        res.status(401).json({ greska: 'Neuspješna prijava' });
+    }
 });
 
 app.post('/logout', (req, res) => {

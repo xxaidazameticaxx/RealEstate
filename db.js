@@ -16,9 +16,9 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 //import modela
-db.nekretnina  = require(path.join(__dirname, "db","models", "nekretnina.js"))(sequelize);
-db.korisnik = require(path.join(__dirname,"db", "models", "korisnik.js"))(sequelize);
-db.upit = require(path.join(__dirname,"db", "models", "upit.js"))(sequelize);
+db.nekretnina  = require(path.join(__dirname, "models", "nekretnina.js"))(sequelize);
+db.korisnik = require(path.join(__dirname, "models", "korisnik.js"))(sequelize);
+db.upit = require(path.join(__dirname, "models", "upit.js"))(sequelize);
 
 //relacije
 db.upit.belongsTo(db.nekretnina, { foreignKey: 'nekretnina_id' });
