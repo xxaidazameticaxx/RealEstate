@@ -28,6 +28,8 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
       <h3 class="naziv">${nekretnina.naziv}</h3>
       <p class="kvadratura">${nekretnina.kvadratura} m<sup>2</sup></p>
       <p class="cijena">${nekretnina.cijena} KM</p>
+      <div style="display:none;" class="lokacija" id="lokacija-${nekretnina.id}">${nekretnina.lokacija}</div>
+      <div style="display:none;" class="godinaIzgradnje" id="godina_izgradnje-${nekretnina.id}">${nekretnina.godina_izgradnje}</div>
       <div class="pretrage" id="pretrage-${nekretnina.id}"></div>
       <div class="klikovi" id="klikovi-${nekretnina.id}"></div>
       <button id="detaljiButton" class="button" onclick="clickDetalji(${nekretnina.id})">Detalji</button>
@@ -103,15 +105,29 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
 
     });
 
+    let prikazaniDetaljiNekretnine;
+
     function clickDetalji(nekretnina_id) {
-      const gridItem = document.getElementById(nekretnina_id);
-    
-      if (gridItem) {
-        gridItem.style.width = '500px';
-        gridItem.style.gridColumn = 'span 2';
+      if(!prikazaniDetaljiNekretnine || prikazaniDetaljiNekretnine != nekretnina_id ){
+        const gridItem = document.getElementById(nekretnina_id);
+      
+        console.log("uslo");
+        if (gridItem) {
+          gridItem.style.width = '500px';
+          gridItem.style.gridColumn = 'span 2';
+          document.getElementById(`lokacija-${nekretnina_id}`).style.display = "";
+          document.getElementById(`godina_izgradnje-${nekretnina_id}`).style.display = "";
+        }
+
+        const returnOldGridItem = document.getElementById(prikazaniDetaljiNekretnine);
+        if (returnOldGridItem) {
+          returnOldGridItem.style.width = '300px';
+          document.getElementById(`lokacija-${prikazaniDetaljiNekretnine}`).style.display = "none";
+          document.getElementById(`godina_izgradnje-${prikazaniDetaljiNekretnine}`).style.display = "none";
+        }
+        prikazaniDetaljiNekretnine = nekretnina_id;
+        MarketingAjax.klikNekretnina(nekretnina_id);
       }
-    
-      MarketingAjax.klikNekretnina(nekretnina_id);
     }
     
     

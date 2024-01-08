@@ -147,3 +147,10 @@ iframe{
   margin-bottom:10px;
   font-weight: bold;
 }
+
+.lokacija,
+.godinaIzgradnje {
+    margin-left: 10px;
+    margin-bottom:10px;
+  }
+  
