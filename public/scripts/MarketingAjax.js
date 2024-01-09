@@ -37,7 +37,12 @@ const MarketingAjax = (() => {
                 },
                 body: JSON.stringify( {nizNekretnina: [parseInt(nekretnina_id)] }),
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(response);
+                }
+                return response.json();
+            })
             .then(data => {
                 sessionNekretnina = data;
             })
@@ -136,7 +141,12 @@ const MarketingAjax = (() => {
                 },
                 body: requestBody,
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(response);
+                }
+                return response.json();
+            })
             .then(data => {
                 sessionNekretnina = data;
                 updateKlikoviWithNewData(nekretnineDivs,data)
@@ -163,7 +173,12 @@ const MarketingAjax = (() => {
                   },
                   body: JSON.stringify({}), 
               })
-                  .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(response);
+                    }
+                    return response.json();
+                })
                   .then(data => {
                     updateKlikoviwithNewData(nekretnineDivs,data)
                   })
@@ -205,7 +220,12 @@ const MarketingAjax = (() => {
                 },
                 body: requestBody,
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(response);
+                }
+                return response.json();
+            })
             .then(data => {
                 updatePretrageWithNewData(nekretnineDivs,data)
             })
@@ -229,7 +249,12 @@ const MarketingAjax = (() => {
                 },
                 body: JSON.stringify({}), 
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(response);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     updatePretrageWithNewData(nekretnineDivs,data)
                 })

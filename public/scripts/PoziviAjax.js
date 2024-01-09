@@ -2,7 +2,12 @@ const PoziviAjax = (() => {
 
     function impl_getNekretninaById(nekretnina_id, fnCallback) {
         fetch(`http://localhost:3000/nekretnina/${nekretnina_id}`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(response);
+            }
+            return response.json();
+        })
         .then(data => fnCallback(null, data))
         .catch(error => fnCallback(error, null));
     }
@@ -10,9 +15,14 @@ const PoziviAjax = (() => {
 
     function impl_getKorisnik(fnCallback) {
         fetch('http://localhost:3000/korisnik')
-            .then(response => response.json())
-            .then(data => fnCallback(null, data))
-            .catch(error => fnCallback(error, null));
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(response);
+            }
+            return response.json();
+        })
+        .then(data => fnCallback(null, data))
+        .catch(error => fnCallback(error, null));
     }
     
     function impl_putKorisnik(noviPodaci, fnCallback) {
@@ -23,14 +33,18 @@ const PoziviAjax = (() => {
             },
             body: JSON.stringify(noviPodaci),
         })
-            .then(response => response.json())
-            .then(data => fnCallback(null, data))
-            .catch(error => fnCallback(error, null));
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(response);
+            }
+            return response.json();
+        })
+        .then(data => fnCallback(null, data))
+        .catch(error => fnCallback(error, null));
     }
 
     function impl_postUpit(nekretnina_id, tekst_upita, fnCallback) {
         const data = { nekretnina_id, tekst_upita };
-
         fetch('http://localhost:3000/upit', {
             method: 'POST',
             headers: {
@@ -38,21 +52,30 @@ const PoziviAjax = (() => {
             },
             body: JSON.stringify(data),
         })
-            .then(response => response.json())
-            .then(data => fnCallback(null, data))
-            .catch(error => fnCallback(error, null));
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(response);
+            }
+            return response.json();
+        })
+        .then(data => fnCallback(null, data))
+        .catch(error => fnCallback(error, null));
     }
 
     function impl_getNekretnine(fnCallback) {
         fetch('http://localhost:3000/nekretnine')
-            .then(response => response.json())
-            .then(data => fnCallback(null, data))
-            .catch(error => fnCallback(error, null));
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(response);
+            }
+            return response.json();
+        })
+        .then(data => fnCallback(null, data))
+        .catch(error => fnCallback(error, null));
     }
 
     function impl_postLogin(username, password, fnCallback) {
         const data = { username, password };
-
         fetch('http://localhost:3000/login', {
             method: 'POST',
             headers: {
@@ -60,18 +83,28 @@ const PoziviAjax = (() => {
             },
             body: JSON.stringify(data),
         })
-            .then(response => response.json())
-            .then(data => fnCallback(null, data))
-            .catch(error => fnCallback(error, null));
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(response);
+            }
+            return response.json();
+        })
+        .then(data => fnCallback(null, data))
+        .catch(error => fnCallback(error, null));
     }
 
     function impl_postLogout(fnCallback) {
         fetch('http://localhost:3000/logout', {
             method: 'POST',
         })
-            .then(response => response.json())
-            .then(data => fnCallback(null, data))
-            .catch(error => fnCallback(error, null));
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(response);
+            }
+            return response.json();
+        })
+        .then(data => fnCallback(null, data))
+        .catch(error => fnCallback(error, null));
     }
 
     return {

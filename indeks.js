@@ -31,8 +31,10 @@ async function findKorisnik(username, password) {
         if (!user) {
             return null;
         }
+        console.log("poslani password je",password);
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
+            console.log("uslo u nevalidni password");
             return null;
         }
         return user;
@@ -44,10 +46,13 @@ async function findKorisnik(username, password) {
 
 // Rute
 app.post('/login', async (req, res) => {
+    console.log("uslo u login");
     const { username, password } = req.body;
     try {
         const user = await findKorisnik(username, password);
+        console.log("nakon poziva ovo je ",user);
         if (!user) {
+            console.log("neuspjesna prijava",user);
             res.status(401).json({ greska: 'Neuspješna prijava' });
         } else {
             req.session.username = username;
@@ -106,7 +111,9 @@ app.put('/korisnik', async(req, res) => {
 });
 
 app.post('/upit', async(req, res) => {
+    console.log("uslo u index rutu");
     if (req.session.username) {
+        console.log("usernamje je",req.session.username);
         const { nekretnina_id, tekst_upita } = req.body;
         try {
             const user = await db.korisnik.findOne({where: { username: req.session.username }});
