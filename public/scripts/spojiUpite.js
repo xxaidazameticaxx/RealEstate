@@ -1,23 +1,10 @@
-
-if (localStorage.getItem('username')) {
-    showUpitForm();
-} else {
-    hideUpitForm();
-}
-
-// Add event listener for changes in local storage
-window.addEventListener('storage', handleStorageChange);
-
-function handleStorageChange(event) {
-    // Check local storage when it changes
-    if (localStorage.getItem('username')) {
-        showUpitForm();
-    } else {
+PoziviAjax.getKorisnik((error, data) => {
+    if (error) {
         hideUpitForm();
+    } else {
+        showUpitForm();
     }
-}
-
-
+});
 
 function showUpitForm() {
     document.getElementById('upitForma').innerHTML = '';
@@ -54,10 +41,7 @@ function showUpitForm() {
 function addNewUpit(username,tekstUpita) {
     const upitiDiv = document.getElementById('UPITI');
 
-    // Check if the 'UPITI' div is hidden, and display it
     upitiDiv.style.display = 'block';
-
-    // Create a new list item for the new upit
     const li = document.createElement('li');
     li.innerHTML = `
         <p>
@@ -68,7 +52,6 @@ function addNewUpit(username,tekstUpita) {
         </p>
     `;
 
-    // Append the new list item to the existing list
     upitiDiv.querySelector('ul').appendChild(li);
 }
 

@@ -1,11 +1,12 @@
 const menuList = document.getElementById('menu-list');
 
-if (localStorage.getItem('username')){
-    loggedInUser();
-}
-else{
-    loggedOutUser();
-}
+PoziviAjax.getKorisnik((error, data) => {
+    if (error) {
+        loggedOutUser();
+    } else {
+        loggedInUser();
+    }
+});
 
 function loggedInUser(){
     menuList.innerHTML="";
