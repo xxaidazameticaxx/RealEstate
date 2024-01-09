@@ -123,6 +123,7 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
           const returnOldGridItem = document.getElementById(prikazaniDetaljiNekretnine);
           if (returnOldGridItem) {
             returnOldGridItem.style.width = '300px';
+            returnOldGridItem.style.gridColumn = 'span 1';
             document.getElementById(`lokacija-${prikazaniDetaljiNekretnine}`).style.display = "none";
             document.getElementById(`godina_izgradnje-${prikazaniDetaljiNekretnine}`).style.display = "none";
             document.getElementById(`detaljiButton-${prikazaniDetaljiNekretnine}`).style.display = "";
