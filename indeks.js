@@ -225,6 +225,31 @@ app.post("/marketing/osvjezi", async (req, res) => {
     }
 });
 
+// Cetvrta spirala
+
+app.get("/nekretnina/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+
+    try {
+        const nekretnina = await db.nekretnina.findByPk(id, {
+            include: [
+                { model: db.upit, include: db.korisnik }  
+            ]
+        });
+
+        if (!nekretnina) {
+            res.status(400).json({ greska: `Nekretnina sa id-em ${id} ne postoji` });
+        } else {
+            res.status(200).json(nekretnina);
+        }
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ greska: 'Greska sa nabavljanjem nekretnina iz baze' });
+    }
+});
+
+
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);

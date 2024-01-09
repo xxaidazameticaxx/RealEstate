@@ -9,7 +9,7 @@ else{
 
 function loggedInUser(){
     menuList.innerHTML="";
-    const options = ['Profil', 'Nekretnine', 'Detalji', 'Odjava'];
+    const options = ['Profil', 'Nekretnine', 'Odjava'];
     options.forEach(option => {
         const li = document.createElement('li');
 
@@ -32,7 +32,7 @@ function loggedInUser(){
 function loggedOutUser(){
     // User is not logged in
     menuList.innerHTML="";
-    const options = ['Nekretnine', 'Detalji', 'Prijava'];
+    const options = ['Nekretnine', 'Prijava'];
     options.forEach(option => {
         const li = document.createElement('li');
         const a = document.createElement('a');

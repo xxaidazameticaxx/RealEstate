@@ -156,7 +156,7 @@ iframe{
 }
 
 #detaljiButton,
-[id^="prikaziDetaljeButton-"] {
+[id^="otvoriDetaljeButton-"] {
     padding: 1em 2em;
     border: none;
     border-radius: 5px;
@@ -173,14 +173,14 @@ iframe{
     margin-bottom: 20px;
 }
 
-[id^="prikaziDetaljeButton-"]:hover {
+[id^="otvoriDetaljeButton-"]:hover {
     color: #ffffff;
     transform: scale(1.1);
     outline: 2px solid #70bdca;
     box-shadow: 4px 5px 17px -4px #268391;
 }
 
-[id^="prikaziDetaljeButton-"]::before {
+[id^="otvoriDetaljeButton-"]::before {
     content: "";
     position: absolute;
     left: -50px;
@@ -193,7 +193,7 @@ iframe{
     transition: width 1000ms;
 }
 
-[id^="prikaziDetaljeButton-"]:hover::before {
+[id^="otvoriDetaljeButton-"]:hover::before {
     width: 250%;
 }
   

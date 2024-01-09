@@ -33,7 +33,7 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
       <div class="pretrage" id="pretrage-${nekretnina.id}"></div>
       <div class="klikovi" id="klikovi-${nekretnina.id}"></div>
       <button id="detaljiButton-${nekretnina.id}" class="button" onclick="clickDetalji(${nekretnina.id})">Detalji</button>
-      <button style="display:none" id="prikaziDetaljeButton-${nekretnina.id}" class="button" onclick="clickPrikaziDetalje(${nekretnina.id})">Prikaži detalje</button>
+      <button style="display:none" id="otvoriDetaljeButton-${nekretnina.id}" class="button" onclick="clickOtvoriDetalje(${nekretnina.id})">Otvori detalje</button>
     `;
 
     gridContainer.appendChild(divItem);
@@ -117,7 +117,7 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
           document.getElementById(`lokacija-${nekretnina_id}`).style.display = "";
           document.getElementById(`godina_izgradnje-${nekretnina_id}`).style.display = "";
           document.getElementById(`detaljiButton-${nekretnina_id}`).style.display="none";
-          document.getElementById(`prikaziDetaljeButton-${nekretnina_id}`).style.display="";
+          document.getElementById(`otvoriDetaljeButton-${nekretnina_id}`).style.display="";
         }
         if(prikazaniDetaljiNekretnine != nekretnina_id || prikazaniDetaljiNekretnine ){
           const returnOldGridItem = document.getElementById(prikazaniDetaljiNekretnine);
@@ -126,11 +126,16 @@ function spojiNekretnine(divReferenca, instancaModula, tip_nekretnine) {
             document.getElementById(`lokacija-${prikazaniDetaljiNekretnine}`).style.display = "none";
             document.getElementById(`godina_izgradnje-${prikazaniDetaljiNekretnine}`).style.display = "none";
             document.getElementById(`detaljiButton-${prikazaniDetaljiNekretnine}`).style.display = "";
-            document.getElementById(`prikaziDetaljeButton-${prikazaniDetaljiNekretnine}`).style.display="none";
+            document.getElementById(`otvoriDetaljeButton-${prikazaniDetaljiNekretnine}`).style.display="none";
           }
         }
         prikazaniDetaljiNekretnine = nekretnina_id;
         MarketingAjax.klikNekretnina(nekretnina_id);
+      }    
+
+      function clickOtvoriDetalje(nekretnina_id) {
+        localStorage.setItem('nekretnina_id', nekretnina_id);
+        window.location.href = 'http://localhost:3000/detalji.html';
       }    
 
     

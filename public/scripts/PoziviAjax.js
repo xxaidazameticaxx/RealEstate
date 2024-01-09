@@ -1,5 +1,13 @@
 const PoziviAjax = (() => {
 
+    function impl_getNekretninaById(nekretnina_id, fnCallback) {
+        fetch(`http://localhost:3000/nekretnina/${nekretnina_id}`)
+        .then(response => response.json())
+        .then(data => fnCallback(null, data))
+        .catch(error => fnCallback(error, null));
+    }
+    
+
     function impl_getKorisnik(fnCallback) {
         fetch('http://localhost:3000/korisnik')
             .then(response => response.json())
@@ -73,5 +81,6 @@ const PoziviAjax = (() => {
         putKorisnik: impl_putKorisnik,
         postUpit: impl_postUpit,
         getNekretnine: impl_getNekretnine,
+        getNekretninaById: impl_getNekretninaById,
     };
 })();
