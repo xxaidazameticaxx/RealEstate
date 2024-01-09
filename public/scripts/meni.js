@@ -16,6 +16,7 @@ function loggedInUser(){
         if (option === 'Odjava') {
             const button = document.createElement('button');
             button.textContent = 'Odjava';
+            button.id ='odjavaButton;'
             button.addEventListener('click', logout);
             li.appendChild(button);
         } else {

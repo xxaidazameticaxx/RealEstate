@@ -1,9 +1,23 @@
-if (localStorage.getItem('username')){
+
+if (localStorage.getItem('username')) {
     showUpitForm();
-}
-else{
+} else {
     hideUpitForm();
 }
+
+// Add event listener for changes in local storage
+window.addEventListener('storage', handleStorageChange);
+
+function handleStorageChange(event) {
+    // Check local storage when it changes
+    if (localStorage.getItem('username')) {
+        showUpitForm();
+    } else {
+        hideUpitForm();
+    }
+}
+
+
 
 function showUpitForm() {
     document.getElementById('upitForma').innerHTML = '';
@@ -16,6 +30,7 @@ function showUpitForm() {
   
     const button = document.createElement('button');
     button.textContent = 'Postavi ';
+    button.id = 'postaviUpit'
     button.addEventListener('click', postaviUpit);
 
     document.getElementById('upitForma').appendChild(inputField);
@@ -24,6 +39,7 @@ function showUpitForm() {
   
   function hideUpitForm() {
     document.getElementById('upitForma').innerHTML = '';
+    document.getElementById('postaviUpit').display = "none";
   }
 
   function callbackFunction(error, data) {
